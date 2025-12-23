@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CopilotDiffPersistence">
+    <option name="pendingDiffs">
+      <map>
+        <entry key="$PROJECT_DIR$/src/lib/errors.ts">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/src/lib/errors.ts" />
+              <option name="originalContent" value="export class SaveProfileError extends Error {&#10;    constructor(msg: string, field: &quot;username&quot; | &quot;email&quot; | &quot;global&quot;) {&#10;        super(msg);&#10;        Object.setPrototypeOf(this, SaveProfileError.prototype);&#10;        this.name = &quot;SaveProfileError&quot;;&#10;        this.field = field;&#10;    }&#10;    field: &quot;username&quot; | &quot;email&quot; | &quot;global&quot;;&#10;}" />
+              <option name="updatedContent" value="export class SaveProfileError extends Error {&#10;    constructor(msg: string, field: &quot;username&quot; | &quot;email&quot; | &quot;global&quot;) {&#10;        super(msg);&#10;        Object.setPrototypeOf(this, SaveProfileError.prototype);&#10;        this.name = &quot;SaveProfileError&quot;;&#10;        this.field = field;&#10;    }&#10;    field: &quot;username&quot; | &quot;email&quot; | &quot;global&quot;;&#10;&#10;    // Stelle sicher, dass beim Serialisieren (z.B. über Server-Actions) alle relevanten Felder erhalten bleiben&#10;    toJSON() {&#10;        return {&#10;            name: this.name,&#10;            message: this.message,&#10;            field: this.field,&#10;        } as const;&#10;    }&#10;}" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
