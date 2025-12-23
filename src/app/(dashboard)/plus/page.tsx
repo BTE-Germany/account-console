@@ -4,12 +4,14 @@ import {
     getStripeManageUrl,
     getSubscriptionInfo
 } from "@/app/(dashboard)/plus/actions";
-import {Alert, AlertDescription, AlertTitle} from "@/components/ui/alert";
-import {CheckCircle2Icon} from "lucide-react";
-import {Badge} from "@/components/ui/badge";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { CheckCircle2Icon } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import dayjs from "dayjs";
-import {cn} from "@/lib/utils";
-import {Button} from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+
+export const dynamic = 'force-dynamic';
 
 export default async function PlusPage() {
 

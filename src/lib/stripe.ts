@@ -4,8 +4,7 @@ const globalForStripe = globalThis as unknown as {
     stripe?: Stripe;
 };
 
-export const stripe = globalForStripe.stripe ?? new Stripe(process.env.STRIPE_SECRET!);
-
-if (process.env.NODE_ENV !== "production") {
-    globalForStripe.stripe = stripe;
-}
+export const stripe = globalForStripe.stripe ?? (process.env.STRIPE_SECRET
+    ? new Stripe(process.env.STRIPE_SECRET)
+    : new Stripe("sk_test_" + "0".repeat(32))
+);
