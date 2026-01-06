@@ -5,8 +5,8 @@ export default function Footer() {
                 <div className=" text-center text-sm text-muted-foreground flex flex-row gap-4 justify-between">
                     &copy; {new Date().getFullYear()} BuildTheEarth Germany e.V. Alle Rechte vorbehalten.
                     <div className="flex items-center gap-4">
-                        <a href="https://www.bte-germany.de/impressum" className="underline hover:text-gray-700 dark:hover:text-gray-200">Impressum</a>
-                        <a href="https://www.bte-germany.de/datenschutz" className="underline hover:text-gray-700 dark:hover:text-gray-200">Datenschutz</a>
+                        <a href="https://bte-germany.de/legal" className="underline hover:text-gray-700 dark:hover:text-gray-200">Impressum</a>
+                        <a href="https://bte-germany.de/privacy" className="underline hover:text-gray-700 dark:hover:text-gray-200">Datenschutz</a>
                     </div>
                 </div>
             </div>
