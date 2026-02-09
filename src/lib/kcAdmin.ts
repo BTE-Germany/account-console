@@ -8,12 +8,11 @@ export default async function getKcAdminClient(): Promise<KcAdminClient> {
             baseUrl: process.env.KEYCLOAK_BASE_URL,
             realmName: process.env.KEYCLOAK_REALM
         });
-
-        await kcAdminClient.auth({
-            clientId: process.env.KEYCLOAK_CLIENT_ID || '',
-            clientSecret: process.env.KEYCLOAK_CLIENT_SECRET || '',
-            grantType: 'client_credentials',
-        })
     }
+    await kcAdminClient.auth({
+        clientId: process.env.KEYCLOAK_CLIENT_ID || '',
+        clientSecret: process.env.KEYCLOAK_CLIENT_SECRET || '',
+        grantType: 'client_credentials',
+    });
     return kcAdminClient
 }
