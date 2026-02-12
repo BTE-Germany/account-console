@@ -68,7 +68,6 @@ const isSecureCookies = (process.env.NEXTAUTH_URL ?? '').startsWith('https://');
 
 export const authOptions: AuthOptions = {
     secret: process.env.NEXTAUTH_SECRET,
-    trustHost: true,
     useSecureCookies: isSecureCookies,
     pages: {
         signIn: "/auth/signin",
