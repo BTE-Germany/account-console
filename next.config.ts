@@ -1,8 +1,9 @@
 import type { NextConfig } from "next";
+import { webpack } from "next/dist/compiled/webpack/webpack";
 
 const nextConfig: NextConfig = {
   /* config options here */
-  output: "standalone",
+  output: "standalone"
 };
 
 export default nextConfig;

@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import dayjs from "dayjs";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export const dynamic = 'force-dynamic';
 
@@ -19,7 +20,7 @@ export default async function PlusPage() {
 
     if (!hasPlusPlan) {
         return <>
-            Aktuell hast du keinen Plus Rang.
+            Aktuell hast du keinen Plus Rang. Du kannst ihn <Link href="/plus/buy" className="text-blue-500 hover:underline">hier</Link> erwerben.
         </>
     }
 
