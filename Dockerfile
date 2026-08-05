@@ -1,4 +1,7 @@
-FROM node:20-alpine AS base
+FROM node:22-alpine AS base
+
+# Let corepack install the pnpm version pinned in package.json without prompting
+ENV COREPACK_ENABLE_DOWNLOAD_PROMPT=0
 
 FROM base AS deps
 RUN apk add --no-cache libc6-compat
