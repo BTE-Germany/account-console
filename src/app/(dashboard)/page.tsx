@@ -1,31 +1,65 @@
-import {getSession} from "@/lib/auth";
-import {Button} from "@/components/ui/button";
-import {Form} from "react-hook-form";
-import EditProfileForm from "@/components/dashboard/profile/EditProfileForm";
-import {Alert, AlertDescription, AlertTitle} from "@/components/ui/alert";
-import {AlertCircleIcon} from "lucide-react";
+import { AlertCircleIcon } from "lucide-react";
+import { LoadError } from "@/components/dashboard/LoadError";
+import { SectionHeader } from "@/components/dashboard/SectionHeader";
+import { DeleteAccountSection } from "@/components/dashboard/profile/DeleteAccountSection";
+import { PersonalInfoForm } from "@/components/dashboard/profile/PersonalInfoForm";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { getPersonalInfo, getSupportedLocales, tryAccount } from "@/lib/keycloak/account-api";
+import { getKeycloakMessages } from "@/lib/keycloak/messages";
+import { getAccountClientRoles } from "@/lib/keycloak/token";
+import { buildProfileForm, getAttributeValues } from "@/lib/keycloak/user-profile";
 
 export default async function Home() {
+    const [personalInfo, supportedLocales, messages, accountRoles] = await Promise.all([
+        tryAccount(getPersonalInfo),
+        tryAccount(getSupportedLocales),
+        getKeycloakMessages(),
+        getAccountClientRoles(),
+    ]);
 
-    const session = await getSession()
+    const header = <SectionHeader title={"Deine Profildaten"} description={"Verwalte deine persönlichen Angaben."} />;
 
-  return (
-    <div className={""}>
-        <h2 className={"text-xl font-bold mb-8"}>
-            Deine Profildaten
-        </h2>
+    if (!personalInfo.ok) {
+        return (
+            <div>
+                {header}
+                <LoadError status={personalInfo.status} />
+            </div>
+        );
+    }
 
-        {
-            !session?.user.email_verified && <Alert variant="destructive" className={"mb-8"}>
-                <AlertCircleIcon />
-                <AlertTitle>E-Mail Adresse verifizieren</AlertTitle>
-                <AlertDescription>
-                    Bitte verifiziere deine E-Mail Adresse, indem du auf den Link in der Bestätigungs-E-Mail klickst, die wir dir gesendet haben. Wenn du die E-Mail nicht erhalten hast, überprüfe bitte auch deinen Spam-Ordner.
-                </AlertDescription>
-            </Alert>
-        }
+    const info = personalInfo.data;
+    const { fields, groups } = buildProfileForm(
+        info.userProfileMetadata,
+        messages,
+        supportedLocales.ok ? supportedLocales.data : [],
+    );
+    const initialValues = Object.fromEntries(fields.map((field) => [field.name, getAttributeValues(info, field.name)]));
 
-        <EditProfileForm currentProfile={{username: session?.user.username || "", email: session?.user.email || ""}} />
-    </div>
-  );
+    return (
+        <div>
+            {header}
+
+            {info.email && !info.emailVerified && (
+                <Alert variant="destructive" className={"mb-8"}>
+                    <AlertCircleIcon />
+                    <AlertTitle>E-Mail-Adresse bestätigen</AlertTitle>
+                    <AlertDescription>
+                        Bitte bestätige deine E-Mail-Adresse, indem du auf den Link in der Bestätigungs-E-Mail klickst, die
+                        wir dir geschickt haben. Wenn du die E-Mail nicht erhalten hast, schau bitte auch in deinem
+                        Spam-Ordner nach.
+                    </AlertDescription>
+                </Alert>
+            )}
+
+            <PersonalInfoForm
+                fields={fields}
+                groups={groups}
+                initialValues={initialValues}
+                emailVerified={!!info.emailVerified}
+            />
+
+            {accountRoles.includes("delete-account") && <DeleteAccountSection />}
+        </div>
+    );
 }

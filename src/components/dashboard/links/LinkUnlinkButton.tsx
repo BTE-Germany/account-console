@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { unlinkAccount, unlinkMinecraftAccount } from "@/app/(dashboard)/links/actions";
 import { useState } from "react";
 import { Spinner } from "@/components/ui/spinner";
-import getPkce from 'oauth-pkce';
 import { LinkIcon, UnlinkIcon } from "lucide-react";
 import {
     Dialog,
@@ -15,7 +14,7 @@ import {
     DialogTrigger
 } from "@/components/ui/dialog";
 import { Kbd } from "@/components/ui/kbd";
-import { getKeycloakUrl } from "@/lib/kcUrl";
+import { startKeycloakAction } from "@/lib/keycloak/required-action";
 
 
 
@@ -59,12 +58,9 @@ export const LinkUnlinkButton = ({ idpAlias, isLinked }: { idpAlias: string, isL
 
     const [loading, setLoading] = useState<boolean>(false);
 
-    const redirectToLinkUrl = async () => {
-        const kcUrl = await getKeycloakUrl()
-        getPkce(50, (error, { challenge }) => {
-            window.location.href = `${kcUrl}/protocol/openid-connect/auth?client_id=bte-account-console&redirect_uri=${encodeURIComponent(window.location.href)}&response_type=code&scope=openid&kc_action=idp_link:${idpAlias}&code_challenge=${challenge}&code_challenge_method=S256`;
-        });
-    }
+    // Keycloak's "idp_link" action (same as Keycloak's own account console). next-auth exchanges
+    // the returned code, so the session afterwards contains fresh tokens.
+    const redirectToLinkUrl = () => startKeycloakAction(`idp_link:${idpAlias}`, "/links")
 
     return (
         <div>
